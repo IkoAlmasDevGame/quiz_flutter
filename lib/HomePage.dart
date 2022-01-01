@@ -1,6 +1,27 @@
 import 'dart:io';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'Model.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:quiz_flutter/Level/Level_I.dart';
+import 'package:quiz_flutter/Level/Level_II.dart';
+import 'package:quiz_flutter/Level/Level_III.dart';
+import 'package:quiz_flutter/Level/Level_IV.dart';
+import 'package:quiz_flutter/Level/Level_IX.dart';
+import 'package:quiz_flutter/Level/Level_V.dart';
+import 'package:quiz_flutter/Level/Level_VI.dart';
+import 'package:quiz_flutter/Level/Level_VII.dart';
+import 'package:quiz_flutter/Level/Level_VIII.dart';
+import 'package:quiz_flutter/Level/Level_X.dart';
+import 'package:quiz_flutter/Level/Level_XII.dart';
+import 'package:quiz_flutter/Level/Level_XIII.dart';
+import 'package:quiz_flutter/Level/Level_XIV.dart';
+import 'package:quiz_flutter/Level/Level_XV.dart';
+import 'package:quiz_flutter/Level/Level_XVI.dart';
+import 'package:quiz_flutter/Level/Level_XVII.dart';
+import 'package:quiz_flutter/Level/Level_XVIII.dart';
+
+import 'Level/Level_XI.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,259 +29,338 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List qList = [
-    Quiz("1.", "A.", "B.", "C.", 1),
-    Quiz("2.", "A.", "B.", "C.", 3),
-    Quiz("3.", "A.", "B.", "C.", 2),
-    Quiz("4.", "A.", "B.", "C.", 1),
-    Quiz("5.", "A.", "B.", "C.", 2),
-    Quiz("6.", "A.", "B.", "C.", 1),
-    Quiz("7.", "A.", "B.", "C.", 1),
-    Quiz("8.", "A.", "B.", "C.", 2),
-    Quiz("9.", "A.", "B.", "C.", 1),
-    Quiz("10.", "A.", "B.", "C.", 2),
-  ];
+  CarouselController _controller = CarouselController();
+  int _current = 0;
 
-  var counter = 0;
-  var score = 0;
-
-  checkWin(int userChoice, BuildContext context){
-    if(userChoice == qList[counter].userAnswere){
-      print("correct");
-      score = score + 10;
-      final snackbar = SnackBar(
-        duration: Duration(milliseconds: 200),
-        backgroundColor: Colors.green,
-        content: Text("Jawaban Anda Benar"),
-      );
-      Scaffold.of(context).showSnackBar(snackbar);
-    }else{
-      print("false");
-      score = score + 0;
-      final snackbar = SnackBar(
-        duration: Duration(milliseconds: 200),
-        backgroundColor: Colors.red,
-        content: Text("Jawaban Anda Salah"),
-      );
-      Scaffold.of(context).showSnackBar(snackbar);
-    }
-    setState(() {
-      if(counter < 9) {
-        counter = counter += 1;
-      }else if (counter > 10) {
-        score = counter > 10 as int;
-      }else{
-        counter = counter > score as int;
-      }
-    });
-  }
-
-  reset()
-  {
-    setState(() {
-      counter = 0;
-      score =0;
-    });
-  }
-
-  Future<void> _showDialog() async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Dilanjutkan Lagi atau tidak permainan game ini ?"),
-            content: SingleChildScrollView(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  TextButton(onPressed: (){
-                    reset();
-                    Navigator.of(context).pop();
-                  },
-                    child: Text("IYA"),
-                  ),
-                  Padding(padding: const EdgeInsets.only(left: 2.5)),
-                  TextButton(onPressed: (){
-                    Navigator.of(context).pop();
-                  },
-                    child: Text("TIDAK"),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-    );
-  }
-
-  Future<void> _showDialogScore() async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        barrierColor: Colors.transparent,
-        builder: (BuildContext context){
-          return AlertDialog(
-            title: const Text("Hasil Nilai Anda"),
-            backgroundColor: Color.fromRGBO(85, 100, 75, 1),
-            content: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 245,
-                    height: 65,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 2.0, color: Colors.black87, style: BorderStyle.solid),
-                    ),
-                    child: Text("\n   Hasil Nilai Latihan Anda : $score", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                    ),
-                  ),
-                  Padding(padding: const EdgeInsets.only(bottom: 10.0),),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      RaisedButton(
-                        onPressed: (){
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("OKE", style: TextStyle(fontSize: 14.0),),
-                        color: Colors.black87,
-                        colorBrightness: Brightness.dark,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-    );
-  }
+  List<String> TextScreen = ["Quiz Flutter", "", "", "", "Remake Quiz Flutter", "By IndoDevGame"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Flutter', style: TextStyle(),
+        title: Text('Home Quiz',
+          style: TextStyle(fontSize: 21, fontFamily: "Times New Romans", fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.grey[800],
       ),
-      backgroundColor: Colors.yellow[900],
-      body: Builder(
-        builder: (BuildContext context)=>SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-            Container(
-            alignment: Alignment.center,
-              height: 200,
-              width: 200,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.2, color: Colors.black87, style: BorderStyle.solid),
+      backgroundColor: Colors.lightBlueAccent,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(left: 10),
+                child: Text('News', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: "ARIAL"),
+                textAlign: TextAlign.left,),
               ),
-              child: Text("Quiz Flutter Indonesia", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, fontFamily: "ARIAL"),
-                textAlign: TextAlign.center,),
-            ),
-            Padding(padding: EdgeInsets.only(top: 30)),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  InkWell(
-                    child: Text("Hasil Score", style: TextStyle(fontSize: 18, color: Colors.greenAccent, fontWeight: FontWeight.bold),),
-                    onTap: _showDialogScore,
+              Padding(padding: EdgeInsets.only(top: 5, left: 10),
+                child: Container(
+                  width: 350,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 3.3, color: Colors.black26, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(3.0),
                   ),
-                  InkWell(
-                    child: Text("Reset Game",style: TextStyle(fontSize: 18,color: Colors.redAccent,fontWeight: FontWeight.bold),),
-                    onTap: _showDialog,
-                  )
-                ],
+                  child: Builder(
+                    builder: (BuildContext context)=>
+                      CarouselSlider(
+                        items: TextScreen.map((i){
+                          return Text('\n\n$i',
+                            style: TextStyle(fontFamily: "Times New Romans", fontSize: 18, fontWeight: FontWeight.bold),
+                          );
+                        }).toList(),
+                        options: CarouselOptions(
+                          autoPlay: false,
+                          aspectRatio: 2.0,
+                          onPageChanged: (index, reason){
+                            setState(() {
+                              _current = index;
+                            });
+                          }
+                        ),
+                      ),
+                  ),
+                ),
               ),
-            ),
-            Padding(padding: EdgeInsets.only(top: 30)),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  border: Border.all(color: Colors.black26, width: 1.5 ,style: BorderStyle.solid),
-              ),
-              height: 90.0,
-              width: 400,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Padding(padding: EdgeInsets.only(top: 5)),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FittedBox(
-                    child: Text(qList[counter].Question,
-                      style: TextStyle(fontSize: 18.0,),
-                    textAlign: TextAlign.start,),
-                  ),
-                ],
+                children: TextScreen.asMap().entries.map((entry) {
+                  return GestureDetector(
+                    onTap: () => _controller.animateToPage(entry.key),
+                    child: Container(
+                      width: 12.0,
+                      height: 12.0,
+                      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black)
+                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                    ),
+                  );
+                }).toList(),
               ),
-            ),
-            Padding(padding: EdgeInsets.only(top: 30)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                RaisedButton(onPressed:()=> checkWin(1, context),
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Text(qList[counter].AnswereA,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-                  color:  Color.fromRGBO(47, 79, 79, 1),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
+              Padding(padding: EdgeInsets.only(top:40, left: 30),
+                child: Text('Pilih Level dibawah ini :', style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 10, left: 20),
+                child: Container(
+                  width: 350,
+                  height: 180,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(width: 2, color: Colors.black, style: BorderStyle.solid),
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.blueAccent, Colors.black38],
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                      Padding(padding: EdgeInsets.only(left: 2.0)),
+                      FloatingActionButton(
+                        child: Text('1', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                        ),
+                        onPressed: (){
+                          var LevelI = Level_I_();
+                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelI));
+                        },
+                        backgroundColor: Colors.transparent,
+                        splashColor: Colors.white,
+                      ),
+                      FloatingActionButton(
+                        child: Text('2', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                        ),
+                        onPressed: (){
+                          var LevelII = Level_II_();
+                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelII));
+                        },
+                        backgroundColor: Colors.transparent,
+                        splashColor: Colors.white,
+                      ),
+                      FloatingActionButton(
+                        child: Text('3', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                        ),
+                        onPressed: (){
+                          var LevelIII = Level_III_();
+                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelIII));
+                        },
+                        backgroundColor: Colors.transparent,
+                        splashColor: Colors.white,
+                      ),
+                      FloatingActionButton(
+                        child: Text('4', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                        ),
+                        onPressed: (){
+                          var LevelIV = Level_IV_();
+                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelIV));
+                        },
+                        backgroundColor: Colors.transparent,
+                        splashColor: Colors.white,
+                      ),
+                      FloatingActionButton(
+                        child: Text('5', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                        ),
+                        onPressed: (){
+                          var LevelV = Level_V_();
+                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelV));
+                        },
+                        backgroundColor: Colors.transparent,
+                        splashColor: Colors.white,
+                      ),
+                      FloatingActionButton(
+                        child: Text('6', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                        ),
+                        onPressed: (){
+                          var LevelVI = Level_VI_();
+                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelVI));
+                        },
+                        backgroundColor: Colors.transparent,
+                        splashColor: Colors.white,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(left: 2, top: 4)),
+                          FloatingActionButton(
+                            child: Text('7', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelVII = Level_VII_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelVII));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('8', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelVIII = Level_VIII_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelVIII));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('9', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelIX = Level_IX_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelIX));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('10', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelX = Level_X_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelX));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('11', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXI = Level_XI_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXI));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('12', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXII = Level_XII_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXII));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(left: 2, top: 4)),
+                          FloatingActionButton(
+                            child: Text('13', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXIII = Level_XIII_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXIII));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('14', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXIV = Level_XIV_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXIV));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('15', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXV = Level_XV_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXV));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('16', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXVI = Level_XVI_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXVI));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('17', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXVII = Level_XVII_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXVII));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                          FloatingActionButton(
+                            child: Text('18', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                            ),
+                            onPressed: (){
+                              var LevelXVIII = Level_XVIII_();
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>LevelXVIII));
+                            },
+                            backgroundColor: Colors.transparent,
+                            splashColor: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            Padding(padding: const EdgeInsets.only(bottom: 2.5)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                RaisedButton(onPressed: ()=> checkWin(2,context),
-                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  child: Text(qList[counter].AnswereB,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-                  color: Color.fromRGBO(105, 105, 105, 1),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                      ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 80, left: 18),
+                child: AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(
+                    'Selamat Datang Di Game Quiz Flutter Remake',
+                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    speed: Duration(milliseconds: 100),
                     ),
                   ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  totalRepeatCount: 10,
                 ),
-                Padding(padding: const EdgeInsets.only(bottom: 2.5)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    RaisedButton(onPressed: ()=> checkWin(3,context),
-                      padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      child: Text(qList[counter].AnswereC,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-                      color: Color.fromRGBO(105, 105, 105, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
       drawer: Drawer(
         child: ListView(
-          children: [
-            ListTile(
-              leading: Icon(Icons.logout),
-              trailing: Icon(Icons.arrow_right),
-              title: Text('Exit Game'),
-              onTap: (){
-                exit(0);
-              },
-            ),
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 600)),
+               ListTile(
+                title: Text('Exit Game', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+                leading: Icon(Icons.exit_to_app),
+                trailing: Icon(Icons.arrow_right),
+                onTap: (){
+                  exit(0);
+                },
+              ),
           ],
         ),
       ),

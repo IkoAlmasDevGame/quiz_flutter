@@ -1,9 +1,10 @@
 class Quiz {
-  String Question;
+  String Exercise;
   String AnswereA;
   String AnswereB;
   String AnswereC;
-  int userAnswere;
+  String AnswereD;
+  int AnswereId;
 
-  Quiz(this.Question, this.AnswereA, this.AnswereB, this.AnswereC, this.userAnswere);
+  Quiz(this.Exercise, this.AnswereA, this.AnswereB, this.AnswereC, this.AnswereD, this.AnswereId);
 }
